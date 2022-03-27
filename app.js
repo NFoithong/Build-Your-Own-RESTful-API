@@ -120,6 +120,18 @@ app.route('/articles/:articleTitle')
                 res.send('No articles matching that article.')
             }
         });
+    })
+    // Update specific api route
+    .put((req, res) => {
+        Article.update({ title: req.params.articleTitle }, { title: req.body.title, content: req.body.content }, { overwrite: true },
+            function(err) {
+                if (!err) {
+                    res.send('Successfully updated article!');
+                } else {
+                    res.send(err);
+                }
+            }
+        )
     });
 
 
