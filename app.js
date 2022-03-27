@@ -28,7 +28,7 @@ const atricleSchema = {
 const Article = mongoose.model('Article', atricleSchema);
 //TODO
 
-// GET all article
+// GET route (all articles)
 app.get('/articles', function(req, res) {
     Article.find(function(err, foundAritcles) {
         // console.log(foundAritcles);
@@ -39,6 +39,26 @@ app.get('/articles', function(req, res) {
         }
     });
 });
+
+// CREATE a new article
+app.post('/articles', (req, res) => {
+    console.log(req.body.title);
+    console.log(req.body.content);
+
+    const newArticle = new Article({
+        title: req.body.title,
+        content: req.body.content
+    });
+    // create save and make function tell the server to response if something wrong
+    newArticle.save(function(err) {
+        if (!err) {
+            res.send('Succesfully added a new article.');
+        } else {
+            res.send(err);
+        }
+    });
+});
+
 
 app.listen(3000, function() {
     console.log('Server started on port 3000');
