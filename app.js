@@ -29,46 +29,85 @@ const Article = mongoose.model('Article', atricleSchema);
 //TODO
 
 // GET route (all articles)
-app.get('/articles', function(req, res) {
-    Article.find(function(err, foundAritcles) {
-        // console.log(foundAritcles);
-        if (!err) {
-            res.send(foundAritcles);
-        } else {
-            res.send(err);
-        }
-    });
-});
+// app.get('/articles', function(req, res) {
+//     Article.find(function(err, foundAritcles) {
+//         // console.log(foundAritcles);
+//         if (!err) {
+//             res.send(foundAritcles);
+//         } else {
+//             res.send(err);
+//         }
+//     });
+// });
 
 // CREATE a new article
-app.post('/articles', (req, res) => {
-    console.log(req.body.title);
-    console.log(req.body.content);
+// app.post('/articles', (req, res) => {
+//     console.log(req.body.title);
+//     console.log(req.body.content);
 
-    const newArticle = new Article({
-        title: req.body.title,
-        content: req.body.content
-    });
-    // create save and make function tell the server to response if something wrong
-    newArticle.save(function(err) {
-        if (!err) {
-            res.send('Succesfully added a new article.');
-        } else {
-            res.send(err);
-        }
-    });
-});
+//     const newArticle = new Article({
+//         title: req.body.title,
+//         content: req.body.content
+//     });
+//     // create save and make function tell the server to response if something wrong
+//     newArticle.save(function(err) {
+//         if (!err) {
+//             res.send('Succesfully added a new article.');
+//         } else {
+//             res.send(err);
+//         }
+//     });
+// });
 
 // Delete all
-app.delete('/articles', (req, res) => {
-    Article.deleteMany({}, function(err) {
-        if (!err) {
-            res.send('Succesfully deleted all articles.')
-        } else {
-            res.send(err);
-        }
+// app.delete('/articles', (req, res) => {
+//     Article.deleteMany({}, function(err) {
+//         if (!err) {
+//             res.send('Succesfully deleted all articles.')
+//         } else {
+//             res.send(err);
+//         }
+//     });
+// });
+
+// Chained route handles using express
+app.route('/articles')
+    .get((req, res) => {
+        Article.find(function(err, foundAritcles) {
+            // console.log(foundAritcles);
+            if (!err) {
+                res.send(foundAritcles);
+            } else {
+                res.send(err);
+            }
+        });
+    })
+    .post((req, res) => {
+        console.log(req.body.title);
+        console.log(req.body.content);
+
+        const newArticle = new Article({
+            title: req.body.title,
+            content: req.body.content
+        });
+        // create save and make function tell the server to response if something wrong
+        newArticle.save(function(err) {
+            if (!err) {
+                res.send('Succesfully added a new article.');
+            } else {
+                res.send(err);
+            }
+        });
+    })
+    .delete((req, res) => {
+        Article.deleteMany({}, function(err) {
+            if (!err) {
+                res.send('Succesfully deleted all articles.')
+            } else {
+                res.send(err);
+            }
+        });
     });
-});
 
 
 app.listen(3000, function() {
