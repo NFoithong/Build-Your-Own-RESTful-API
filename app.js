@@ -123,7 +123,7 @@ app.route('/articles/:articleTitle')
     })
     // Update specific api route
     .put((req, res) => {
-        Article.update({ title: req.params.articleTitle }, { title: req.body.title, content: req.body.content }, { overwrite: true },
+        Article.updateMany({ title: req.params.articleTitle }, { title: req.body.title, content: req.body.content }, { overwrite: true },
             function(err) {
                 if (!err) {
                     res.send('Successfully updated article!');
@@ -132,7 +132,21 @@ app.route('/articles/:articleTitle')
                 }
             }
         )
-    });
+    })
+    //update particular field (document)
+    .patch((req, res) => {
+        Article.updateMany({ title: req.params.articleTitle },
+            // flag $set opertor
+            { $set: req.body },
+            function(err) {
+                if (!err) {
+                    res.send('Successfully updated');
+                } else {
+                    res.send(err);
+                }
+            }
+        )
+    })
 
 
 app.listen(3000, function() {
