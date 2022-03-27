@@ -145,8 +145,18 @@ app.route('/articles/:articleTitle')
                     res.send(err);
                 }
             }
-        )
+        );
     })
+    // delete particular api
+    .delete((req, res) => {
+        Article.deleteOne({ title: req.params.articleTitle }, (err) => {
+            if (!err) {
+                res.send('Successfully deleted particular article.');
+            } else {
+                res.send(err);
+            }
+        });
+    });
 
 
 app.listen(3000, function() {
