@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
-const { get } = require('express/lib/response');
+// const { get } = require('express/lib/response');
 
 const app = express();
 
@@ -61,7 +61,7 @@ const Article = mongoose.model('Article', atricleSchema);
 
 // Delete all
 // app.delete('/articles', (req, res) => {
-//     Article.deleteMany({}, function(err) {
+//     Article.deleteMany(function(err) {
 //         if (!err) {
 //             res.send('Succesfully deleted all articles.')
 //         } else {
@@ -71,6 +71,7 @@ const Article = mongoose.model('Article', atricleSchema);
 // });
 
 // Chained route handles using express
+// Request targetting all articles
 app.route('/articles')
     .get((req, res) => {
         Article.find(function(err, foundAritcles) {
@@ -83,8 +84,8 @@ app.route('/articles')
         });
     })
     .post((req, res) => {
-        console.log(req.body.title);
-        console.log(req.body.content);
+        // console.log(req.body.title);
+        // console.log(req.body.content);
 
         const newArticle = new Article({
             title: req.body.title,
@@ -100,11 +101,23 @@ app.route('/articles')
         });
     })
     .delete((req, res) => {
-        Article.deleteMany({}, function(err) {
+        Article.deleteMany(function(err) {
             if (!err) {
                 res.send('Succesfully deleted all articles.')
             } else {
                 res.send(err);
+            }
+        });
+    });
+
+// request targeting a specific article
+app.route('/articles/:articleTitle')
+    .get((req, res) => {
+        Article.findOne({ title: req.params.articleTitle }, (err, foundArticle) => {
+            if (foundArticle) {
+                res.send(foundArticle);
+            } else {
+                res.send('No articles matching that article.')
             }
         });
     });
